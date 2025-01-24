@@ -3,8 +3,26 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, Waves, Users, Database } from "lucide-react";
+import { Shield, Waves, Users, Database, ChartLine } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+
+const monitoringData = [
+  { time: "00:00", tieba: 40, weibo: 24, tiktok: 67 },
+  { time: "04:00", tieba: 30, weibo: 45, tiktok: 45 },
+  { time: "08:00", tieba: 55, weibo: 65, tiktok: 78 },
+  { time: "12:00", tieba: 80, weibo: 70, tiktok: 89 },
+  { time: "16:00", tieba: 65, weibo: 55, tiktok: 56 },
+  { time: "20:00", tieba: 45, weibo: 35, tiktok: 45 },
+];
 
 const Index = () => {
   const { toast } = useToast();
@@ -47,18 +65,18 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-[#F1F0FB] p-8">
       <div className="max-w-6xl mx-auto space-y-8">
-        <header className="text-center flex flex-col items-center">
+        <header className="text-center flex flex-col items-center bg-white rounded-lg p-8 shadow-sm">
           <div className="w-24 h-24 mb-4">
             <img 
               src="/lovable-uploads/8ddbcdba-1c9f-4b81-abf7-ed484ff6c63a.png" 
-              alt="语方舟" 
+              alt="和语方舟" 
               className="w-full h-full object-contain"
             />
           </div>
-          <h1 className="text-4xl font-bold text-primary mb-4">语方舟</h1>
-          <p className="text-secondary">专业的社群言论安全监控平台</p>
+          <h1 className="text-4xl font-bold text-[#7E69AB] mb-4">和语方舟</h1>
+          <p className="text-[#8E9196]">专业的社群言论安全监控平台</p>
         </header>
 
         <Tabs defaultValue="monitor" className="w-full">
@@ -82,27 +100,48 @@ const Index = () => {
           </TabsList>
 
           <TabsContent value="monitor">
-            <Card className="p-6">
-              <h2 className="text-2xl font-semibold mb-4">平台监控</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {Object.entries(monitoringStatus).map(([platform, status]) => (
-                  <div key={platform} className="p-4 border rounded-lg">
-                    <div className="flex justify-between items-center mb-2">
-                      <h3 className="text-lg font-medium capitalize">{platform}</h3>
-                      <Button
-                        variant={status ? "destructive" : "default"}
-                        onClick={() => toggleMonitoring(platform as keyof typeof monitoringStatus)}
-                      >
-                        {status ? "停止监控" : "开始监控"}
-                      </Button>
+            <div className="grid gap-6">
+              <Card className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-semibold flex items-center gap-2">
+                    <ChartLine className="w-6 h-6 text-[#7E69AB]" />
+                    监控数据
+                  </h2>
+                </div>
+                <div className="h-[300px] mb-8">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={monitoringData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="time" />
+                      <YAxis />
+                      <Tooltip />
+                      <Line type="monotone" dataKey="tieba" stroke="#8B5CF6" name="贴吧" />
+                      <Line type="monotone" dataKey="weibo" stroke="#0EA5E9" name="微博" />
+                      <Line type="monotone" dataKey="tiktok" stroke="#F97316" name="抖音" />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {Object.entries(monitoringStatus).map(([platform, status]) => (
+                    <div key={platform} className="p-4 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow">
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="text-lg font-medium capitalize">{platform}</h3>
+                        <Button
+                          variant={status ? "destructive" : "default"}
+                          onClick={() => toggleMonitoring(platform as keyof typeof monitoringStatus)}
+                          className="bg-[#7E69AB] hover:bg-[#6E59A5]"
+                        >
+                          {status ? "停止监控" : "开始监控"}
+                        </Button>
+                      </div>
+                      <p className="text-sm text-[#8E9196]">
+                        状态: {status ? "监控中" : "未监控"}
+                      </p>
                     </div>
-                    <p className="text-sm text-gray-500">
-                      状态: {status ? "监控中" : "未监控"}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </Card>
+                  ))}
+                </div>
+              </Card>
+            </div>
           </TabsContent>
 
           <TabsContent value="keywords">
@@ -114,30 +153,31 @@ const Index = () => {
                     placeholder="添加新关键词..."
                     value={newKeyword}
                     onChange={(e) => setNewKeyword(e.target.value)}
+                    className="bg-white"
                   />
-                  <Button onClick={addCustomKeyword}>添加</Button>
+                  <Button onClick={addCustomKeyword} className="bg-[#7E69AB] hover:bg-[#6E59A5]">添加</Button>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
+                  <div className="p-4 bg-white rounded-lg shadow-sm">
                     <h3 className="font-semibold mb-2">系统关键词</h3>
                     <div className="flex flex-wrap gap-2">
                       {keywords.map((keyword) => (
                         <span
                           key={keyword}
-                          className="px-3 py-1 bg-primary/10 text-primary rounded-full"
+                          className="px-3 py-1 bg-[#D3E4FD] text-[#7E69AB] rounded-full text-sm"
                         >
                           {keyword}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <div>
+                  <div className="p-4 bg-white rounded-lg shadow-sm">
                     <h3 className="font-semibold mb-2">自定义关键词</h3>
                     <div className="flex flex-wrap gap-2">
                       {customKeywords.map((keyword) => (
                         <span
                           key={keyword}
-                          className="px-3 py-1 bg-secondary/10 text-secondary rounded-full"
+                          className="px-3 py-1 bg-[#F1F0FB] text-[#7E69AB] rounded-full text-sm"
                         >
                           {keyword}
                         </span>
@@ -152,7 +192,7 @@ const Index = () => {
           <TabsContent value="ai">
             <Card className="p-6">
               <h2 className="text-2xl font-semibold mb-4">AI情感分析</h2>
-              <p className="text-secondary">
+              <p className="text-[#8E9196]">
                 即将推出: AI驱动的情感分析功能，可以识别隐含的负面情绪和潜在威胁。
               </p>
             </Card>
@@ -161,7 +201,7 @@ const Index = () => {
           <TabsContent value="review">
             <Card className="p-6">
               <h2 className="text-2xl font-semibold mb-4">用户评审系统</h2>
-              <p className="text-secondary">
+              <p className="text-[#8E9196]">
                 即将推出: 优质用户参与的内容评审机制，提供更准确的边缘案例判断。
               </p>
             </Card>
