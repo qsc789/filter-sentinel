@@ -6,6 +6,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Shield, Waves, Users, Database, ChartLine } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
   LineChart,
   Line,
   XAxis,
@@ -63,6 +71,44 @@ const Index = () => {
       description: `已添加关键词: ${newKeyword}`,
     });
   };
+
+  const myReviewRecords = [
+    {
+      id: 1,
+      content: "这个帖子涉及敏感话题",
+      platform: "贴吧",
+      community: "科技社区",
+      status: "已处理",
+      date: "2024-03-15",
+    },
+    {
+      id: 2,
+      content: "违规广告内容",
+      platform: "微博",
+      community: "游戏玩家圈",
+      status: "待处理",
+      date: "2024-03-14",
+    },
+  ];
+
+  const communityReviewRecords = [
+    {
+      id: 1,
+      content: "不当言论",
+      platform: "抖音",
+      reviewer: "用户A",
+      status: "已处理",
+      date: "2024-03-15",
+    },
+    {
+      id: 2,
+      content: "垃圾广告",
+      platform: "贴吧",
+      reviewer: "用户B",
+      status: "待处理",
+      date: "2024-03-14",
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-[#F1F0FB] p-8">
@@ -200,10 +246,91 @@ const Index = () => {
 
           <TabsContent value="review">
             <Card className="p-6">
-              <h2 className="text-2xl font-semibold mb-4">用户评审系统</h2>
-              <p className="text-[#8E9196]">
-                即将推出: 优质用户参与的内容评审机制，提供更准确的边缘案例判断。
-              </p>
+              <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
+                <Users className="w-6 h-6 text-[#7E69AB]" />
+                用户评审系统
+              </h2>
+              
+              <Tabs defaultValue="my-reviews" className="w-full">
+                <TabsList className="mb-6">
+                  <TabsTrigger value="my-reviews">我的评审记录</TabsTrigger>
+                  <TabsTrigger value="community-reviews">我的社群评审记录</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="my-reviews">
+                  <div className="rounded-lg border">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>内容</TableHead>
+                          <TableHead>平台</TableHead>
+                          <TableHead>社群</TableHead>
+                          <TableHead>状态</TableHead>
+                          <TableHead>日期</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {myReviewRecords.map((record) => (
+                          <TableRow key={record.id}>
+                            <TableCell>{record.content}</TableCell>
+                            <TableCell>{record.platform}</TableCell>
+                            <TableCell>{record.community}</TableCell>
+                            <TableCell>
+                              <span
+                                className={`px-2 py-1 rounded-full text-xs ${
+                                  record.status === "已处理"
+                                    ? "bg-green-100 text-green-700"
+                                    : "bg-yellow-100 text-yellow-700"
+                                }`}
+                              >
+                                {record.status}
+                              </span>
+                            </TableCell>
+                            <TableCell>{record.date}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="community-reviews">
+                  <div className="rounded-lg border">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>内容</TableHead>
+                          <TableHead>平台</TableHead>
+                          <TableHead>评审人</TableHead>
+                          <TableHead>状态</TableHead>
+                          <TableHead>日期</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {communityReviewRecords.map((record) => (
+                          <TableRow key={record.id}>
+                            <TableCell>{record.content}</TableCell>
+                            <TableCell>{record.platform}</TableCell>
+                            <TableCell>{record.reviewer}</TableCell>
+                            <TableCell>
+                              <span
+                                className={`px-2 py-1 rounded-full text-xs ${
+                                  record.status === "已处理"
+                                    ? "bg-green-100 text-green-700"
+                                    : "bg-yellow-100 text-yellow-700"
+                                }`}
+                              >
+                                {record.status}
+                              </span>
+                            </TableCell>
+                            <TableCell>{record.date}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </TabsContent>
+              </Tabs>
             </Card>
           </TabsContent>
         </Tabs>
