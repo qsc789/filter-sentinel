@@ -22,6 +22,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { ContentAnalysis } from "@/components/analysis/ContentAnalysis";
 
 const monitoringData = [
   { time: "00:00", tieba: 40, weibo: 24, tiktok: 67 },
@@ -237,10 +238,11 @@ const Index = () => {
 
           <TabsContent value="ai">
             <Card className="p-6">
-              <h2 className="text-2xl font-semibold mb-4">AI情感分析</h2>
-              <p className="text-[#8E9196]">
-                即将推出: AI驱动的情感分析功能，可以识别隐含的负面情绪和潜在威胁。
-              </p>
+              <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
+                <Waves className="w-6 h-6 text-[#7E69AB]" />
+                AI情感分析
+              </h2>
+              <ContentAnalysis />
             </Card>
           </TabsContent>
 
