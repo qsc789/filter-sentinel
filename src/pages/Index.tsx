@@ -3,42 +3,30 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AlertCircle, Shield, Users, Database } from "lucide-react";
+import { Shield, Waves, Users, Database } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
   const { toast } = useToast();
-  const [content, setContent] = useState("");
   const [keywords, setKeywords] = useState<string[]>(["暴力", "威胁", "攻击"]);
   const [customKeywords, setCustomKeywords] = useState<string[]>([]);
   const [newKeyword, setNewKeyword] = useState("");
+  const [monitoringStatus, setMonitoringStatus] = useState({
+    tieba: false,
+    weibo: false,
+    tiktok: false
+  });
 
-  const analyzeContent = () => {
-    if (!content) {
-      toast({
-        title: "请输入内容",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // 简单的关键词检测示例
-    const hasKeyword = [...keywords, ...customKeywords].some(keyword => 
-      content.includes(keyword)
-    );
-
-    if (hasKeyword) {
-      toast({
-        title: "检测到敏感内容",
-        description: "该内容可能包含不当信息",
-        variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "内容审核通过",
-        description: "未检测到敏感内容",
-      });
-    }
+  const toggleMonitoring = (platform: keyof typeof monitoringStatus) => {
+    setMonitoringStatus(prev => ({
+      ...prev,
+      [platform]: !prev[platform]
+    }));
+    
+    toast({
+      title: `${monitoringStatus[platform] ? "停止" : "开始"}监控`,
+      description: `${platform} 平台监控已${monitoringStatus[platform] ? "停止" : "开始"}`,
+    });
   };
 
   const addCustomKeyword = () => {
@@ -61,23 +49,30 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-6xl mx-auto space-y-8">
-        <header className="text-center">
-          <h1 className="text-4xl font-bold text-primary mb-4">内容审核平台</h1>
-          <p className="text-secondary">专业的社交媒体内容审核解决方案</p>
+        <header className="text-center flex flex-col items-center">
+          <div className="w-24 h-24 mb-4">
+            <img 
+              src="/lovable-uploads/8ddbcdba-1c9f-4b81-abf7-ed484ff6c63a.png" 
+              alt="语方舟" 
+              className="w-full h-full object-contain"
+            />
+          </div>
+          <h1 className="text-4xl font-bold text-primary mb-4">语方舟</h1>
+          <p className="text-secondary">专业的社群言论安全监控平台</p>
         </header>
 
-        <Tabs defaultValue="analyze" className="w-full">
+        <Tabs defaultValue="monitor" className="w-full">
           <TabsList className="grid w-full grid-cols-4 mb-8">
-            <TabsTrigger value="analyze" className="flex items-center gap-2">
+            <TabsTrigger value="monitor" className="flex items-center gap-2">
               <Shield className="w-4 h-4" />
-              内容分析
+              平台监控
             </TabsTrigger>
             <TabsTrigger value="keywords" className="flex items-center gap-2">
               <Database className="w-4 h-4" />
               关键词管理
             </TabsTrigger>
             <TabsTrigger value="ai" className="flex items-center gap-2">
-              <AlertCircle className="w-4 h-4" />
+              <Waves className="w-4 h-4" />
               AI分析
             </TabsTrigger>
             <TabsTrigger value="review" className="flex items-center gap-2">
@@ -86,19 +81,26 @@ const Index = () => {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="analyze">
+          <TabsContent value="monitor">
             <Card className="p-6">
-              <h2 className="text-2xl font-semibold mb-4">内容分析</h2>
-              <div className="space-y-4">
-                <textarea
-                  className="w-full h-40 p-4 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="请输入需要分析的内容..."
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                />
-                <Button onClick={analyzeContent} className="w-full">
-                  开始分析
-                </Button>
+              <h2 className="text-2xl font-semibold mb-4">平台监控</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {Object.entries(monitoringStatus).map(([platform, status]) => (
+                  <div key={platform} className="p-4 border rounded-lg">
+                    <div className="flex justify-between items-center mb-2">
+                      <h3 className="text-lg font-medium capitalize">{platform}</h3>
+                      <Button
+                        variant={status ? "destructive" : "default"}
+                        onClick={() => toggleMonitoring(platform as keyof typeof monitoringStatus)}
+                      >
+                        {status ? "停止监控" : "开始监控"}
+                      </Button>
+                    </div>
+                    <p className="text-sm text-gray-500">
+                      状态: {status ? "监控中" : "未监控"}
+                    </p>
+                  </div>
+                ))}
               </div>
             </Card>
           </TabsContent>
