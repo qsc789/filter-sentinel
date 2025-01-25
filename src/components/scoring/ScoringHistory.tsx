@@ -1,8 +1,8 @@
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import type { ScoringHistory } from "@/types/scoring";
+import type { ScoringHistoryType } from "@/types/scoring";
 
-const mockHistory: ScoringHistory[] = [
+const mockHistory: ScoringHistoryType[] = [
   {
     id: "1",
     content: "这是一条测试内容",

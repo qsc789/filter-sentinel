@@ -8,6 +8,23 @@ import { useToast } from "@/components/ui/use-toast";
 import { ContentAnalysis } from "@/components/analysis/ContentAnalysis";
 import { ScoringRules } from "@/components/scoring/ScoringRules";
 import { ScoringHistory } from "@/components/scoring/ScoringHistory";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+} from "recharts";
 
 const monitoringData = [
   { time: "00:00", tieba: 40, weibo: 24, tiktok: 67 },
@@ -335,3 +352,4 @@ const Index = () => {
 };
 
 export default Index;
+

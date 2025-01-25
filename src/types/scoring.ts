@@ -7,7 +7,7 @@ export type ScoringRule = {
   description: string;
 };
 
-export type ScoringHistory = {
+export type ScoringHistoryType = {
   id: string;
   content: string;
   score: number;
