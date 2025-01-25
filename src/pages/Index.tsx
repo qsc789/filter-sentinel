@@ -50,19 +50,27 @@ const engagementData = [
 ];
 
 const PLATFORM_COLORS = {
-  tieba: "#1E40AF",
-  weibo: "#DC2626",
-  tiktok: "#000000",
-  facebook: "#1877F2"
+  tieba: "#B7B7EB",    // Light Purple
+  weibo: "#9D9EA3",    // Gray
+  tiktok: "#EAB883",   // Light Orange
+  facebook: "#99BBE1"  // Light Blue
 };
 
-const PIE_COLORS = ["#1E40AF", "#DC2626", "#000000", "#1877F2"];
+const PIE_COLORS = ["#B7B7EB", "#9D9EA3", "#EAB883", "#99BBE1", "#F09BA0"];
+
+const COMMUNITY_KEYWORDS = {
+  anime: ["辱华", "人设崩坏", "毒害青少年", "抄袭"],
+  cosplay: ["照骗", "滤镜", "假胸", "整容"],
+  football: ["黑哨", "假球", "水货", "演员"],
+  entertainment: ["塌房", "劣迹", "假唱", "黑料"]
+};
 
 const Index = () => {
   const { toast } = useToast();
   const [keywords, setKeywords] = useState<string[]>(["暴力", "威胁", "攻击"]);
   const [customKeywords, setCustomKeywords] = useState<string[]>([]);
   const [newKeyword, setNewKeyword] = useState("");
+  const [selectedCommunity, setSelectedCommunity] = useState<keyof typeof COMMUNITY_KEYWORDS | null>(null);
   const [monitoringStatus, setMonitoringStatus] = useState({
     tieba: false,
     weibo: false,
@@ -99,43 +107,14 @@ const Index = () => {
     });
   };
 
-  const myReviewRecords = [
-    {
-      id: 1,
-      content: "这个帖子涉及敏感话题",
-      platform: "贴吧",
-      community: "科技社区",
-      status: "已处理",
-      date: "2024-03-15",
-    },
-    {
-      id: 2,
-      content: "违规广告内容",
-      platform: "微博",
-      community: "游戏玩家圈",
-      status: "待处理",
-      date: "2024-03-14",
-    },
-  ];
-
-  const communityReviewRecords = [
-    {
-      id: 1,
-      content: "不当言论",
-      platform: "抖音",
-      reviewer: "用户A",
-      status: "已处理",
-      date: "2024-03-15",
-    },
-    {
-      id: 2,
-      content: "垃圾广告",
-      platform: "贴吧",
-      reviewer: "用户B",
-      status: "待处理",
-      date: "2024-03-14",
-    },
-  ];
+  const selectCommunityKeywords = (community: keyof typeof COMMUNITY_KEYWORDS) => {
+    setSelectedCommunity(community);
+    setCustomKeywords([...customKeywords, ...COMMUNITY_KEYWORDS[community]]);
+    toast({
+      title: "已添加社群关键词",
+      description: `已添加${community}相关的关键词`,
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#F1F0FB] to-[#E5DEFF] p-8">
@@ -144,7 +123,7 @@ const Index = () => {
           <div className="w-16 h-16 mb-4 relative">
             <div className="absolute inset-0 bg-[#7E69AB]/20 rounded-full animate-pulse"></div>
             <img 
-              src="/lovable-uploads/341c8be6-8717-4328-a8b2-ff7da0c445bf.png" 
+              src="/lovable-uploads/ef4a095b-c738-4af3-9144-dc5579e8eb92.png" 
               alt="和语方舟" 
               className="w-full h-full object-contain relative z-10"
             />
@@ -194,6 +173,7 @@ const Index = () => {
                       </div>
                       <Button
                         variant={status ? "destructive" : "default"}
+                        size="sm"
                         onClick={() => toggleMonitoring(platform as keyof typeof monitoringStatus)}
                         className={`${
                           status 
@@ -201,7 +181,7 @@ const Index = () => {
                             : "bg-[#7E69AB] hover:bg-[#6E59A5]"
                         } text-white transition-colors duration-300`}
                       >
-                        {status ? "停止监控" : "开始监控"}
+                        {status ? "停止" : "开始"}
                       </Button>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-[#8E9196]">
@@ -213,7 +193,7 @@ const Index = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card className="p-6">
+                <Card className="p-6 bg-white/90 backdrop-blur-sm hover:shadow-lg transition-all duration-300">
                   <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                     <ChartLine className="w-5 h-5 text-[#7E69AB]" />
                     实时活跃度趋势
@@ -225,16 +205,48 @@ const Index = () => {
                         <XAxis dataKey="time" stroke="#6B7280" />
                         <YAxis stroke="#6B7280" />
                         <Tooltip />
-                        <Line type="monotone" dataKey="tieba" stroke={PLATFORM_COLORS.tieba} name="贴吧" strokeWidth={2} />
-                        <Line type="monotone" dataKey="weibo" stroke={PLATFORM_COLORS.weibo} name="微博" strokeWidth={2} />
-                        <Line type="monotone" dataKey="tiktok" stroke={PLATFORM_COLORS.tiktok} name="TikTok" strokeWidth={2} />
-                        <Line type="monotone" dataKey="facebook" stroke={PLATFORM_COLORS.facebook} name="Facebook" strokeWidth={2} />
+                        <Line 
+                          type="monotone" 
+                          dataKey="tieba" 
+                          stroke={PLATFORM_COLORS.tieba} 
+                          name="贴吧" 
+                          strokeWidth={2}
+                          dot={{ fill: PLATFORM_COLORS.tieba }}
+                          activeDot={{ r: 6 }}
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="weibo" 
+                          stroke={PLATFORM_COLORS.weibo} 
+                          name="微博" 
+                          strokeWidth={2}
+                          dot={{ fill: PLATFORM_COLORS.weibo }}
+                          activeDot={{ r: 6 }}
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="tiktok" 
+                          stroke={PLATFORM_COLORS.tiktok} 
+                          name="TikTok" 
+                          strokeWidth={2}
+                          dot={{ fill: PLATFORM_COLORS.tiktok }}
+                          activeDot={{ r: 6 }}
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="facebook" 
+                          stroke={PLATFORM_COLORS.facebook} 
+                          name="Facebook" 
+                          strokeWidth={2}
+                          dot={{ fill: PLATFORM_COLORS.facebook }}
+                          activeDot={{ r: 6 }}
+                        />
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
                 </Card>
 
-                <Card className="p-6">
+                <Card className="p-6 bg-white/90 backdrop-blur-sm hover:shadow-lg transition-all duration-300">
                   <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                     <TrendingUp className="w-5 h-5 text-[#7E69AB]" />
                     平台参与度分布
@@ -254,7 +266,11 @@ const Index = () => {
                           label
                         >
                           {engagementData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                            <Cell 
+                              key={`cell-${index}`} 
+                              fill={PIE_COLORS[index % PIE_COLORS.length]}
+                              className="transition-all duration-300 hover:opacity-80"
+                            />
                           ))}
                         </Pie>
                         <Tooltip />
@@ -263,34 +279,13 @@ const Index = () => {
                   </div>
                 </Card>
               </div>
-
-              <Card className="p-6">
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                  <MessageCircle className="w-5 h-5 text-[#7E69AB]" />
-                  互动量统计
-                </h3>
-                <div className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={monitoringData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                      <XAxis dataKey="time" stroke="#6B7280" />
-                      <YAxis stroke="#6B7280" />
-                      <Tooltip />
-                      <Bar dataKey="tieba" fill={PLATFORM_COLORS.tieba} name="贴吧" />
-                      <Bar dataKey="weibo" fill={PLATFORM_COLORS.weibo} name="微博" />
-                      <Bar dataKey="tiktok" fill={PLATFORM_COLORS.tiktok} name="TikTok" />
-                      <Bar dataKey="facebook" fill={PLATFORM_COLORS.facebook} name="Facebook" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </Card>
             </div>
           </TabsContent>
 
-          <TabsContent value="keywords">
-            <Card className="p-6">
-              <h2 className="text-2xl font-semibold mb-4">关键词管理</h2>
-              <div className="space-y-4">
+          <TabsContent value="keywords" className="animate-fade-in">
+            <Card className="p-6 bg-white/90 backdrop-blur-sm">
+              <h2 className="text-2xl font-semibold mb-6">关键词管理</h2>
+              <div className="space-y-6">
                 <div className="flex gap-2">
                   <Input
                     placeholder="添加新关键词..."
@@ -298,35 +293,46 @@ const Index = () => {
                     onChange={(e) => setNewKeyword(e.target.value)}
                     className="bg-white"
                   />
-                  <Button onClick={addCustomKeyword} className="bg-[#7E69AB] hover:bg-[#6E59A5]">添加</Button>
+                  <Button onClick={addCustomKeyword} className="bg-[#7E69AB] hover:bg-[#6E59A5]">
+                    添加
+                  </Button>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 bg-white rounded-lg shadow-sm">
-                    <h3 className="font-semibold mb-2">系统关键词</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {keywords.map((keyword) => (
-                        <span
-                          key={keyword}
-                          className="px-3 py-1 bg-[#D3E4FD] text-[#7E69AB] rounded-full text-sm"
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <Card className="p-4 bg-white/80 hover:shadow-md transition-all duration-300">
+                    <h3 className="font-semibold mb-4">社群关键词模板</h3>
+                    <div className="grid grid-cols-2 gap-2">
+                      {Object.entries(COMMUNITY_KEYWORDS).map(([community, keywords]) => (
+                        <Button
+                          key={community}
+                          variant="outline"
+                          onClick={() => selectCommunityKeywords(community as keyof typeof COMMUNITY_KEYWORDS)}
+                          className={`text-sm ${
+                            selectedCommunity === community ? "border-[#7E69AB] bg-[#7E69AB]/10" : ""
+                          }`}
                         >
-                          {keyword}
-                        </span>
+                          {community === "anime" && "动漫圈"}
+                          {community === "cosplay" && "Coser圈"}
+                          {community === "football" && "足球圈"}
+                          {community === "entertainment" && "娱乐圈"}
+                        </Button>
                       ))}
                     </div>
-                  </div>
-                  <div className="p-4 bg-white rounded-lg shadow-sm">
-                    <h3 className="font-semibold mb-2">自定义关键词</h3>
+                  </Card>
+
+                  <Card className="p-4 bg-white/80 hover:shadow-md transition-all duration-300">
+                    <h3 className="font-semibold mb-4">已添加关键词</h3>
                     <div className="flex flex-wrap gap-2">
                       {customKeywords.map((keyword) => (
                         <span
                           key={keyword}
-                          className="px-3 py-1 bg-[#F1F0FB] text-[#7E69AB] rounded-full text-sm"
+                          className="px-3 py-1 bg-[#F1F0FB] text-[#7E69AB] rounded-full text-sm animate-fade-in"
                         >
                           {keyword}
                         </span>
                       ))}
                     </div>
-                  </div>
+                  </Card>
                 </div>
               </div>
             </Card>
