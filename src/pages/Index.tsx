@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, Waves, Users, Database, ChartLine } from "lucide-react";
+import { Shield, Waves, Users, Database, ChartLine, Activity, TrendingUp, MessageCircle } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { ContentAnalysis } from "@/components/analysis/ContentAnalysis";
 import { ScoringRules } from "@/components/scoring/ScoringRules";
@@ -24,16 +23,39 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
 } from "recharts";
 
 const monitoringData = [
-  { time: "00:00", tieba: 40, weibo: 24, tiktok: 67 },
-  { time: "04:00", tieba: 30, weibo: 45, tiktok: 45 },
-  { time: "08:00", tieba: 55, weibo: 65, tiktok: 78 },
-  { time: "12:00", tieba: 80, weibo: 70, tiktok: 89 },
-  { time: "16:00", tieba: 65, weibo: 55, tiktok: 56 },
-  { time: "20:00", tieba: 45, weibo: 35, tiktok: 45 },
+  { time: "00:00", tieba: 40, weibo: 24, tiktok: 67, facebook: 45 },
+  { time: "04:00", tieba: 30, weibo: 45, tiktok: 45, facebook: 38 },
+  { time: "08:00", tieba: 55, weibo: 65, tiktok: 78, facebook: 52 },
+  { time: "12:00", tieba: 80, weibo: 70, tiktok: 89, facebook: 75 },
+  { time: "16:00", tieba: 65, weibo: 55, tiktok: 56, facebook: 60 },
+  { time: "20:00", tieba: 45, weibo: 35, tiktok: 45, facebook: 42 },
 ];
+
+const engagementData = [
+  { name: "贴吧", value: 35 },
+  { name: "微博", value: 30 },
+  { name: "TikTok", value: 25 },
+  { name: "Facebook", value: 10 },
+];
+
+const PLATFORM_COLORS = {
+  tieba: "#1E40AF",
+  weibo: "#DC2626",
+  tiktok: "#000000",
+  facebook: "#1877F2"
+};
+
+const PIE_COLORS = ["#1E40AF", "#DC2626", "#000000", "#1877F2"];
 
 const Index = () => {
   const { toast } = useToast();
@@ -43,7 +65,8 @@ const Index = () => {
   const [monitoringStatus, setMonitoringStatus] = useState({
     tieba: false,
     weibo: false,
-    tiktok: false
+    tiktok: false,
+    facebook: false
   });
 
   const toggleMonitoring = (platform: keyof typeof monitoringStatus) => {
@@ -115,17 +138,17 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-[#F1F0FB] p-8">
-      <div className="max-w-6xl mx-auto space-y-8">
-        <header className="text-center flex flex-col items-center bg-white rounded-lg p-6 shadow-sm">
-          <div className="w-16 h-16 mb-2">
+      <div className="max-w-7xl mx-auto space-y-8">
+        <header className="text-center flex flex-col items-center bg-white rounded-lg p-4 shadow-sm">
+          <div className="w-12 h-12 mb-2">
             <img 
               src="/lovable-uploads/8ddbcdba-1c9f-4b81-abf7-ed484ff6c63a.png" 
               alt="和语方舟" 
               className="w-full h-full object-contain"
             />
           </div>
-          <h1 className="text-2xl font-bold text-[#7E69AB] mb-2">和语方舟</h1>
-          <p className="text-sm text-[#8E9196]">专业的社群言论安全监控平台</p>
+          <h1 className="text-xl font-bold text-[#7E69AB] mb-1">和语方舟</h1>
+          <p className="text-xs text-[#8E9196]">专业的社群言论安全监控平台</p>
         </header>
 
         <Tabs defaultValue="monitor" className="w-full">
@@ -150,44 +173,104 @@ const Index = () => {
 
           <TabsContent value="monitor">
             <div className="grid gap-6">
-              <Card className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-semibold flex items-center gap-2">
-                    <ChartLine className="w-6 h-6 text-[#7E69AB]" />
-                    监控数据
-                  </h2>
-                </div>
-                <div className="h-[300px] mb-8">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={monitoringData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="time" />
-                      <YAxis />
-                      <Tooltip />
-                      <Line type="monotone" dataKey="tieba" stroke="#8B5CF6" name="贴吧" />
-                      <Line type="monotone" dataKey="weibo" stroke="#0EA5E9" name="微博" />
-                      <Line type="monotone" dataKey="tiktok" stroke="#F97316" name="抖音" />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {Object.entries(monitoringStatus).map(([platform, status]) => (
-                    <div key={platform} className="p-4 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow">
-                      <div className="flex justify-between items-center mb-2">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {Object.entries(monitoringStatus).map(([platform, status]) => (
+                  <Card key={platform} className="p-4 hover:shadow-lg transition-shadow duration-200">
+                    <div className="flex justify-between items-center mb-2">
+                      <div className="flex items-center gap-2">
+                        <img 
+                          src={`/platform-logos/${platform}.svg`} 
+                          alt={platform} 
+                          className="w-6 h-6"
+                        />
                         <h3 className="text-lg font-medium capitalize">{platform}</h3>
-                        <Button
-                          variant={status ? "destructive" : "default"}
-                          onClick={() => toggleMonitoring(platform as keyof typeof monitoringStatus)}
-                          className="bg-[#7E69AB] hover:bg-[#6E59A5]"
-                        >
-                          {status ? "停止监控" : "开始监控"}
-                        </Button>
                       </div>
-                      <p className="text-sm text-[#8E9196]">
-                        状态: {status ? "监控中" : "未监控"}
-                      </p>
+                      <Button
+                        variant={status ? "destructive" : "default"}
+                        onClick={() => toggleMonitoring(platform as keyof typeof monitoringStatus)}
+                        className="bg-[#7E69AB] hover:bg-[#6E59A5]"
+                      >
+                        {status ? "停止监控" : "开始监控"}
+                      </Button>
                     </div>
-                  ))}
+                    <div className="flex items-center gap-2 text-sm text-[#8E9196]">
+                      <Activity className="w-4 h-4" />
+                      <span>状态: {status ? "监控中" : "未监控"}</span>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card className="p-6">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <ChartLine className="w-5 h-5 text-[#7E69AB]" />
+                    实时活跃度趋势
+                  </h3>
+                  <div className="h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={monitoringData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                        <XAxis dataKey="time" stroke="#6B7280" />
+                        <YAxis stroke="#6B7280" />
+                        <Tooltip />
+                        <Line type="monotone" dataKey="tieba" stroke={PLATFORM_COLORS.tieba} name="贴吧" strokeWidth={2} />
+                        <Line type="monotone" dataKey="weibo" stroke={PLATFORM_COLORS.weibo} name="微博" strokeWidth={2} />
+                        <Line type="monotone" dataKey="tiktok" stroke={PLATFORM_COLORS.tiktok} name="TikTok" strokeWidth={2} />
+                        <Line type="monotone" dataKey="facebook" stroke={PLATFORM_COLORS.facebook} name="Facebook" strokeWidth={2} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </Card>
+
+                <Card className="p-6">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5 text-[#7E69AB]" />
+                    平台参与度分布
+                  </h3>
+                  <div className="h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={engagementData}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={60}
+                          outerRadius={100}
+                          fill="#8884d8"
+                          paddingAngle={5}
+                          dataKey="value"
+                          label
+                        >
+                          {engagementData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                </Card>
+              </div>
+
+              <Card className="p-6">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <MessageCircle className="w-5 h-5 text-[#7E69AB]" />
+                  互动量统计
+                </h3>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={monitoringData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                      <XAxis dataKey="time" stroke="#6B7280" />
+                      <YAxis stroke="#6B7280" />
+                      <Tooltip />
+                      <Bar dataKey="tieba" fill={PLATFORM_COLORS.tieba} name="贴吧" />
+                      <Bar dataKey="weibo" fill={PLATFORM_COLORS.weibo} name="微博" />
+                      <Bar dataKey="tiktok" fill={PLATFORM_COLORS.tiktok} name="TikTok" />
+                      <Bar dataKey="facebook" fill={PLATFORM_COLORS.facebook} name="Facebook" />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
               </Card>
             </div>
@@ -352,4 +435,3 @@ const Index = () => {
 };
 
 export default Index;
-
