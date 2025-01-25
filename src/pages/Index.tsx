@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, Waves, Users, Database, ChartLine, Activity, TrendingUp, MessageCircle } from "lucide-react";
+import { Shield, Waves, Users, Database, ChartLine, Activity, TrendingUp, MessageCircle, AlertCircle, Bell } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { ContentAnalysis } from "@/components/analysis/ContentAnalysis";
 import { ScoringRules } from "@/components/scoring/ScoringRules";
@@ -16,6 +16,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 import {
   ResponsiveContainer,
@@ -66,7 +72,13 @@ const COMMUNITY_KEYWORDS = {
   entertainment: ["塌房", "劣迹", "假唱", "黑料"]
 };
 
-// Add mock data for review records
+const communityWarnings = [
+  { community: "动漫圈", count: 15, severity: "high" },
+  { community: "Coser圈", count: 8, severity: "medium" },
+  { community: "足球圈", count: 12, severity: "high" },
+  { community: "娱乐圈", count: 20, severity: "critical" }
+];
+
 const myReviewRecords = [
   {
     id: "1",
@@ -165,12 +177,38 @@ const Index = () => {
             <img 
               src="/lovable-uploads/ef4a095b-c738-4af3-9144-dc5579e8eb92.png" 
               alt="和语方舟" 
-              className="w-full h-full object-contain relative z-10"
+              className="w-full h-full object-contain relative z-10 animate-bounce"
             />
           </div>
-          <h1 className="text-2xl font-bold text-[#7E69AB] mb-2 hover:text-[#6E59A5] transition-colors">和语方舟</h1>
-          <p className="text-sm text-[#8E9196] max-w-md">专业的社群言论安全监控平台</p>
+          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#7E69AB] to-[#9b87f5] mb-2 hover:scale-105 transition-transform">
+            和语方舟
+          </h1>
+          <p className="text-sm text-[#8E9196] max-w-md animate-fade-in">专业的社群言论安全监控平台</p>
         </header>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 animate-fade-in">
+          {communityWarnings.map((warning) => (
+            <Card 
+              key={warning.community}
+              className={`p-4 hover:shadow-xl transition-all duration-300 ${
+                warning.severity === 'critical' ? 'bg-red-50' :
+                warning.severity === 'high' ? 'bg-orange-50' :
+                'bg-yellow-50'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <AlertCircle className={`${
+                  warning.severity === 'critical' ? 'text-red-500' :
+                  warning.severity === 'high' ? 'text-orange-500' :
+                  'text-yellow-500'
+                }`} />
+                <h3 className="font-medium">{warning.community}</h3>
+              </div>
+              <p className="mt-2 text-2xl font-bold">{warning.count}</p>
+              <p className="text-sm text-gray-600">条预警信息</p>
+            </Card>
+          ))}
+        </div>
 
         <Tabs defaultValue="monitor" className="w-full">
           <TabsList className="grid w-full grid-cols-4 mb-8 bg-white/50 backdrop-blur p-1 rounded-xl">
@@ -219,7 +257,7 @@ const Index = () => {
                           status 
                             ? "bg-[#DC2626] hover:bg-[#B91C1C]" 
                             : "bg-[#7E69AB] hover:bg-[#6E59A5]"
-                        } text-white transition-colors duration-300`}
+                        } text-white transition-colors duration-300 text-xs px-3`}
                       >
                         {status ? "停止" : "开始"}
                       </Button>
@@ -324,7 +362,10 @@ const Index = () => {
 
           <TabsContent value="keywords" className="animate-fade-in">
             <Card className="p-6 bg-white/90 backdrop-blur-sm">
-              <h2 className="text-2xl font-semibold mb-6">关键词管理</h2>
+              <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
+                <Database className="w-6 h-6 text-[#7E69AB]" />
+                关键词管理
+              </h2>
               <div className="space-y-6">
                 <div className="flex gap-2">
                   <Input
@@ -333,14 +374,20 @@ const Index = () => {
                     onChange={(e) => setNewKeyword(e.target.value)}
                     className="bg-white"
                   />
-                  <Button onClick={addCustomKeyword} className="bg-[#7E69AB] hover:bg-[#6E59A5]">
+                  <Button 
+                    onClick={addCustomKeyword} 
+                    className="bg-[#7E69AB] hover:bg-[#6E59A5] transition-colors"
+                  >
                     添加
                   </Button>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <Card className="p-4 bg-white/80 hover:shadow-md transition-all duration-300">
-                    <h3 className="font-semibold mb-4">社群关键词模板</h3>
+                    <h3 className="font-semibold mb-4 flex items-center gap-2">
+                      <Users className="w-4 h-4 text-[#7E69AB]" />
+                      社群关键词模板
+                    </h3>
                     <div className="grid grid-cols-2 gap-2">
                       {Object.entries(COMMUNITY_KEYWORDS).map(([community, keywords]) => (
                         <Button
@@ -348,8 +395,8 @@ const Index = () => {
                           variant="outline"
                           onClick={() => selectCommunityKeywords(community as keyof typeof COMMUNITY_KEYWORDS)}
                           className={`text-sm ${
-                            selectedCommunity === community ? "border-[#7E69AB] bg-[#7E69AB]/10" : ""
-                          }`}
+                            selectedCommunity === community ? 'border-[#7E69AB] bg-[#7E69AB]/10' : ''
+                          } hover:bg-[#7E69AB]/5 transition-colors`}
                         >
                           {community === "anime" && "动漫圈"}
                           {community === "cosplay" && "Coser圈"}
@@ -361,12 +408,15 @@ const Index = () => {
                   </Card>
 
                   <Card className="p-4 bg-white/80 hover:shadow-md transition-all duration-300">
-                    <h3 className="font-semibold mb-4">已添加关键词</h3>
+                    <h3 className="font-semibold mb-4 flex items-center gap-2">
+                      <Database className="w-4 h-4 text-[#7E69AB]" />
+                      已添加关键词
+                    </h3>
                     <div className="flex flex-wrap gap-2">
                       {customKeywords.map((keyword) => (
                         <span
                           key={keyword}
-                          className="px-3 py-1 bg-[#F1F0FB] text-[#7E69AB] rounded-full text-sm animate-fade-in"
+                          className="px-3 py-1 bg-[#F1F0FB] text-[#7E69AB] rounded-full text-sm animate-fade-in hover:bg-[#7E69AB] hover:text-white transition-colors cursor-default"
                         >
                           {keyword}
                         </span>
@@ -423,23 +473,40 @@ const Index = () => {
                       </TableHeader>
                       <TableBody>
                         {myReviewRecords.map((record) => (
-                          <TableRow key={record.id}>
-                            <TableCell>{record.content}</TableCell>
-                            <TableCell>{record.platform}</TableCell>
-                            <TableCell>{record.community}</TableCell>
-                            <TableCell>
-                              <span
-                                className={`px-2 py-1 rounded-full text-xs ${
-                                  record.status === "已处理"
-                                    ? "bg-green-100 text-green-700"
-                                    : "bg-yellow-100 text-yellow-700"
-                                }`}
-                              >
-                                {record.status}
-                              </span>
-                            </TableCell>
-                            <TableCell>{record.date}</TableCell>
-                          </TableRow>
+                          <Accordion type="single" collapsible key={record.id}>
+                            <AccordionItem value={record.id}>
+                              <TableRow className="cursor-pointer hover:bg-gray-50">
+                                <TableCell>
+                                  <AccordionTrigger className="hover:no-underline">
+                                    {record.content}
+                                  </AccordionTrigger>
+                                </TableCell>
+                                <TableCell>{record.platform}</TableCell>
+                                <TableCell>{record.community}</TableCell>
+                                <TableCell>
+                                  <span
+                                    className={`px-2 py-1 rounded-full text-xs ${
+                                      record.status === "已处理"
+                                        ? "bg-green-100 text-green-700"
+                                        : "bg-yellow-100 text-yellow-700"
+                                    }`}
+                                  >
+                                    {record.status}
+                                  </span>
+                                </TableCell>
+                                <TableCell>{record.date}</TableCell>
+                              </TableRow>
+                              <AccordionContent>
+                                <div className="p-4 bg-gray-50">
+                                  <h4 className="font-medium mb-2">详细信息</h4>
+                                  <p className="text-sm text-gray-600">
+                                    这里可以显示更多关于该评审记录的详细信息，
+                                    包括评审过程、处理方式等。
+                                  </p>
+                                </div>
+                              </AccordionContent>
+                            </AccordionItem>
+                          </Accordion>
                         ))}
                       </TableBody>
                     </Table>
@@ -460,23 +527,40 @@ const Index = () => {
                       </TableHeader>
                       <TableBody>
                         {communityReviewRecords.map((record) => (
-                          <TableRow key={record.id}>
-                            <TableCell>{record.content}</TableCell>
-                            <TableCell>{record.platform}</TableCell>
-                            <TableCell>{record.reviewer}</TableCell>
-                            <TableCell>
-                              <span
-                                className={`px-2 py-1 rounded-full text-xs ${
-                                  record.status === "已处理"
-                                    ? "bg-green-100 text-green-700"
-                                    : "bg-yellow-100 text-yellow-700"
-                                }`}
-                              >
-                                {record.status}
-                              </span>
-                            </TableCell>
-                            <TableCell>{record.date}</TableCell>
-                          </TableRow>
+                          <Accordion type="single" collapsible key={record.id}>
+                            <AccordionItem value={record.id}>
+                              <TableRow className="cursor-pointer hover:bg-gray-50">
+                                <TableCell>
+                                  <AccordionTrigger className="hover:no-underline">
+                                    {record.content}
+                                  </AccordionTrigger>
+                                </TableCell>
+                                <TableCell>{record.platform}</TableCell>
+                                <TableCell>{record.reviewer}</TableCell>
+                                <TableCell>
+                                  <span
+                                    className={`px-2 py-1 rounded-full text-xs ${
+                                      record.status === "已处理"
+                                        ? "bg-green-100 text-green-700"
+                                        : "bg-yellow-100 text-yellow-700"
+                                    }`}
+                                  >
+                                    {record.status}
+                                  </span>
+                                </TableCell>
+                                <TableCell>{record.date}</TableCell>
+                              </TableRow>
+                              <AccordionContent>
+                                <div className="p-4 bg-gray-50">
+                                  <h4 className="font-medium mb-2">详细信息</h4>
+                                  <p className="text-sm text-gray-600">
+                                    这里可以显示更多关于该社群评审记录的详细信息，
+                                    包括评审进度、处理意见等。
+                                  </p>
+                                </div>
+                              </AccordionContent>
+                            </AccordionItem>
+                          </Accordion>
                         ))}
                       </TableBody>
                     </Table>
