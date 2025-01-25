@@ -138,64 +138,74 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F1F0FB] p-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#F1F0FB] to-[#E5DEFF] p-8">
       <div className="max-w-7xl mx-auto space-y-8">
-        <header className="text-center flex flex-col items-center bg-white rounded-lg p-4 shadow-sm">
-          <div className="w-12 h-12 mb-2">
+        <header className="text-center flex flex-col items-center bg-white/80 backdrop-blur-lg rounded-2xl p-8 shadow-lg transform hover:scale-[1.02] transition-all duration-300 animate-fade-in">
+          <div className="w-16 h-16 mb-4 relative">
+            <div className="absolute inset-0 bg-[#7E69AB]/20 rounded-full animate-pulse"></div>
             <img 
-              src="/lovable-uploads/8ddbcdba-1c9f-4b81-abf7-ed484ff6c63a.png" 
+              src="/lovable-uploads/341c8be6-8717-4328-a8b2-ff7da0c445bf.png" 
               alt="和语方舟" 
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain relative z-10"
             />
           </div>
-          <h1 className="text-xl font-bold text-[#7E69AB] mb-1">和语方舟</h1>
-          <p className="text-xs text-[#8E9196]">专业的社群言论安全监控平台</p>
+          <h1 className="text-2xl font-bold text-[#7E69AB] mb-2 hover:text-[#6E59A5] transition-colors">和语方舟</h1>
+          <p className="text-sm text-[#8E9196] max-w-md">专业的社群言论安全监控平台</p>
         </header>
 
         <Tabs defaultValue="monitor" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-8">
-            <TabsTrigger value="monitor" className="flex items-center gap-2">
+          <TabsList className="grid w-full grid-cols-4 mb-8 bg-white/50 backdrop-blur p-1 rounded-xl">
+            <TabsTrigger value="monitor" className="flex items-center gap-2 data-[state=active]:bg-[#7E69AB] data-[state=active]:text-white">
               <Shield className="w-4 h-4" />
               平台监控
             </TabsTrigger>
-            <TabsTrigger value="keywords" className="flex items-center gap-2">
+            <TabsTrigger value="keywords" className="flex items-center gap-2 data-[state=active]:bg-[#7E69AB] data-[state=active]:text-white">
               <Database className="w-4 h-4" />
               关键词管理
             </TabsTrigger>
-            <TabsTrigger value="ai" className="flex items-center gap-2">
+            <TabsTrigger value="ai" className="flex items-center gap-2 data-[state=active]:bg-[#7E69AB] data-[state=active]:text-white">
               <Waves className="w-4 h-4" />
               AI分析
             </TabsTrigger>
-            <TabsTrigger value="review" className="flex items-center gap-2">
+            <TabsTrigger value="review" className="flex items-center gap-2 data-[state=active]:bg-[#7E69AB] data-[state=active]:text-white">
               <Users className="w-4 h-4" />
               用户评审
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="monitor">
+          <TabsContent value="monitor" className="animate-fade-in">
             <div className="grid gap-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {Object.entries(monitoringStatus).map(([platform, status]) => (
-                  <Card key={platform} className="p-4 hover:shadow-lg transition-shadow duration-200">
-                    <div className="flex justify-between items-center mb-2">
-                      <div className="flex items-center gap-2">
-                        <img 
-                          src={`/platform-logos/${platform}.svg`} 
-                          alt={platform} 
-                          className="w-6 h-6"
-                        />
-                        <h3 className="text-lg font-medium capitalize">{platform}</h3>
+                  <Card 
+                    key={platform} 
+                    className="p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-white/80 backdrop-blur-sm border-[#E5DEFF]"
+                  >
+                    <div className="flex justify-between items-center mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-[#F1F0FB] p-2 flex items-center justify-center">
+                          <img 
+                            src={`/platform-logos/${platform}.svg`} 
+                            alt={platform} 
+                            className="w-6 h-6"
+                          />
+                        </div>
+                        <h3 className="text-lg font-medium capitalize text-[#403E43]">{platform}</h3>
                       </div>
                       <Button
                         variant={status ? "destructive" : "default"}
                         onClick={() => toggleMonitoring(platform as keyof typeof monitoringStatus)}
-                        className="bg-[#7E69AB] hover:bg-[#6E59A5]"
+                        className={`${
+                          status 
+                            ? "bg-[#DC2626] hover:bg-[#B91C1C]" 
+                            : "bg-[#7E69AB] hover:bg-[#6E59A5]"
+                        } text-white transition-colors duration-300`}
                       >
                         {status ? "停止监控" : "开始监控"}
                       </Button>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-[#8E9196]">
-                      <Activity className="w-4 h-4" />
+                      <Activity className={`w-4 h-4 ${status ? "text-green-500" : "text-gray-400"}`} />
                       <span>状态: {status ? "监控中" : "未监控"}</span>
                     </div>
                   </Card>
