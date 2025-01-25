@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import {
   ResponsiveContainer,
   LineChart,
@@ -64,6 +65,45 @@ const COMMUNITY_KEYWORDS = {
   football: ["黑哨", "假球", "水货", "演员"],
   entertainment: ["塌房", "劣迹", "假唱", "黑料"]
 };
+
+// Add mock data for review records
+const myReviewRecords = [
+  {
+    id: "1",
+    content: "这个内容有点问题",
+    platform: "微博",
+    community: "动漫圈",
+    status: "已处理",
+    date: "2024-03-15"
+  },
+  {
+    id: "2",
+    content: "需要审核的内容",
+    platform: "贴吧",
+    community: "游戏圈",
+    status: "待处理",
+    date: "2024-03-14"
+  }
+];
+
+const communityReviewRecords = [
+  {
+    id: "1",
+    content: "社群举报内容",
+    platform: "微博",
+    reviewer: "张三",
+    status: "已处理",
+    date: "2024-03-15"
+  },
+  {
+    id: "2",
+    content: "需要社群评审",
+    platform: "TikTok",
+    reviewer: "李四",
+    status: "待处理",
+    date: "2024-03-14"
+  }
+];
 
 const Index = () => {
   const { toast } = useToast();
