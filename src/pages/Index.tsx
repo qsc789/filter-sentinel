@@ -5,24 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Shield, Waves, Users, Database, ChartLine } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
 import { ContentAnalysis } from "@/components/analysis/ContentAnalysis";
+import { ScoringRules } from "@/components/scoring/ScoringRules";
+import { ScoringHistory } from "@/components/scoring/ScoringHistory";
 
 const monitoringData = [
   { time: "00:00", tieba: 40, weibo: 24, tiktok: 67 },
@@ -114,16 +99,16 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-[#F1F0FB] p-8">
       <div className="max-w-6xl mx-auto space-y-8">
-        <header className="text-center flex flex-col items-center bg-white rounded-lg p-8 shadow-sm">
-          <div className="w-24 h-24 mb-4">
+        <header className="text-center flex flex-col items-center bg-white rounded-lg p-6 shadow-sm">
+          <div className="w-16 h-16 mb-2">
             <img 
               src="/lovable-uploads/8ddbcdba-1c9f-4b81-abf7-ed484ff6c63a.png" 
               alt="和语方舟" 
               className="w-full h-full object-contain"
             />
           </div>
-          <h1 className="text-4xl font-bold text-[#7E69AB] mb-4">和语方舟</h1>
-          <p className="text-[#8E9196]">专业的社群言论安全监控平台</p>
+          <h1 className="text-2xl font-bold text-[#7E69AB] mb-2">和语方舟</h1>
+          <p className="text-sm text-[#8E9196]">专业的社群言论安全监控平台</p>
         </header>
 
         <Tabs defaultValue="monitor" className="w-full">
@@ -242,7 +227,15 @@ const Index = () => {
                 <Waves className="w-6 h-6 text-[#7E69AB]" />
                 AI情感分析
               </h2>
-              <ContentAnalysis />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <ContentAnalysis />
+                </div>
+                <div className="space-y-6">
+                  <ScoringRules />
+                  <ScoringHistory />
+                </div>
+              </div>
             </Card>
           </TabsContent>
 
