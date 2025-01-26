@@ -3,42 +3,13 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, Waves, Users, Database, ChartLine, Activity, TrendingUp, MessageCircle, AlertCircle, Bell } from "lucide-react";
+import { Shield, Waves, Users, Database, ChartLine, Activity, TrendingUp, MessageCircle, AlertCircle } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { ContentAnalysis } from "@/components/analysis/ContentAnalysis";
 import { ScoringRules } from "@/components/scoring/ScoringRules";
 import { ScoringHistory } from "@/components/scoring/ScoringHistory";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  AreaChart,
-  Area,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { UserMenu } from "@/components/auth/UserMenu";
 
 const monitoringData = [
   { time: "00:00", tieba: 40, weibo: 24, tiktok: 67, facebook: 45 },
@@ -169,21 +140,24 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F1F0FB] to-[#E5DEFF] p-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#F1F0FB] to-[#E5DEFF] dark:from-gray-900 dark:to-gray-800 p-8">
       <div className="max-w-7xl mx-auto space-y-8">
-        <header className="text-center flex flex-col items-center bg-white/80 backdrop-blur-lg rounded-2xl p-8 shadow-lg transform hover:scale-[1.02] transition-all duration-300 animate-fade-in">
-          <div className="w-16 h-16 mb-4 relative">
-            <div className="absolute inset-0 bg-[#7E69AB]/20 rounded-full animate-pulse"></div>
+        <header className="text-center flex flex-col items-center bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl p-8 shadow-lg">
+          <div className="absolute top-4 right-4 flex items-center gap-2">
+            <ThemeToggle />
+            <UserMenu />
+          </div>
+          <div className="w-16 h-16 mb-4">
             <img 
               src="/lovable-uploads/ef4a095b-c738-4af3-9144-dc5579e8eb92.png" 
               alt="和语方舟" 
-              className="w-full h-full object-contain relative z-10 animate-bounce"
+              className="w-full h-full object-contain"
             />
           </div>
-          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#7E69AB] to-[#9b87f5] mb-2 hover:scale-105 transition-transform">
+          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#7E69AB] to-[#9b87f5] mb-2">
             和语方舟
           </h1>
-          <p className="text-sm text-[#8E9196] max-w-md animate-fade-in">专业的社群言论安全监控平台</p>
+          <p className="text-sm text-[#8E9196] dark:text-gray-400 max-w-md">专业的社群言论安全监控平台</p>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 animate-fade-in">
