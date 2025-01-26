@@ -10,6 +10,32 @@ import { ScoringRules } from "@/components/scoring/ScoringRules";
 import { ScoringHistory } from "@/components/scoring/ScoringHistory";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { UserMenu } from "@/components/auth/UserMenu";
+import {
+  ResponsiveContainer,
+  LineChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip as RechartsTooltip,
+  Line,
+  PieChart,
+  Pie,
+  Cell
+} from 'recharts';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const monitoringData = [
   { time: "00:00", tieba: 40, weibo: 24, tiktok: 67, facebook: 45 },
@@ -550,3 +576,4 @@ const Index = () => {
 };
 
 export default Index;
+
