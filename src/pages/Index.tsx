@@ -9,32 +9,6 @@ import { ContentAnalysis } from "@/components/analysis/ContentAnalysis";
 import { ScoringRules } from "@/components/scoring/ScoringRules";
 import { ScoringHistory } from "@/components/scoring/ScoringHistory";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
-import { 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip as RechartsTooltip, 
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell
-} from 'recharts';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 
 const monitoringData = [
   { time: "00:00", tieba: 40, weibo: 24, tiktok: 67, facebook: 45 },
@@ -281,7 +255,7 @@ const Index = () => {
                         <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
                         <XAxis dataKey="time" stroke="#6B7280" />
                         <YAxis stroke="#6B7280" />
-                        <RechartsTooltip />
+                        <Tooltip />
                         <Line 
                           type="monotone" 
                           dataKey="tieba" 
@@ -350,7 +324,7 @@ const Index = () => {
                             />
                           ))}
                         </Pie>
-                        <RechartsTooltip />
+                        <Tooltip />
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
