@@ -8,37 +8,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { ContentAnalysis } from "@/components/analysis/ContentAnalysis";
 import { ScoringRules } from "@/components/scoring/ScoringRules";
 import { ScoringHistory } from "@/components/scoring/ScoringHistory";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  AreaChart,
-  Area,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 const monitoringData = [
   { time: "00:00", tieba: 40, weibo: 24, tiktok: 67, facebook: 45 },
@@ -172,6 +142,9 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-[#F1F0FB] to-[#E5DEFF] p-8">
       <div className="max-w-7xl mx-auto space-y-8">
         <header className="text-center flex flex-col items-center bg-white/80 backdrop-blur-lg rounded-2xl p-8 shadow-lg transform hover:scale-[1.02] transition-all duration-300 animate-fade-in">
+          <div className="absolute top-8 right-8">
+            <ThemeToggle />
+          </div>
           <div className="w-16 h-16 mb-4 relative">
             <div className="absolute inset-0 bg-[#7E69AB]/20 rounded-full animate-pulse"></div>
             <img 
