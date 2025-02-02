@@ -43,6 +43,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 const monitoringData = [
   { time: "00:00", tieba: 40, weibo: 24, tiktok: 67, facebook: 45 },
@@ -134,6 +136,21 @@ const Index = () => {
     facebook: false
   });
 
+  const navigate = useNavigate();
+  const handleSignOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      navigate("/auth");
+    } catch (error: any) {
+      toast({
+        title: "退出失败",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   const toggleMonitoring = (platform: keyof typeof monitoringStatus) => {
     setMonitoringStatus(prev => ({
       ...prev,
@@ -186,7 +203,7 @@ const Index = () => {
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>个人中心</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/profile")}>
                   <User className="mr-2 h-4 w-4" />
                   <span>个人资料</span>
                 </DropdownMenuItem>
@@ -195,7 +212,7 @@ const Index = () => {
                   <span>消息通知</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-red-600">
+                <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
                   退出登录
                 </DropdownMenuItem>
               </DropdownMenuContent>
