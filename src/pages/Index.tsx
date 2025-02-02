@@ -165,46 +165,45 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F1F0FB] to-[#E5DEFF] p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
-        <header className="text-center flex flex-col items-center bg-white/80 backdrop-blur-lg rounded-2xl p-8 shadow-lg transform hover:scale-[1.02] transition-all duration-300 animate-fade-in">
-          <div className="absolute top-8 right-8">
+    <div className="min-h-screen bg-gradient-to-br from-background to-background/95 p-4 md:p-8">
+      <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
+        <header className="text-center flex flex-col items-center bg-white/80 dark:bg-black/20 backdrop-blur-lg rounded-2xl p-6 md:p-8 shadow-lg">
+          <div className="absolute top-4 right-4 md:top-8 md:right-8">
             <ThemeToggle />
           </div>
-          <div className="w-16 h-16 mb-4 relative">
-            <div className="absolute inset-0 bg-[#7E69AB]/20 rounded-full animate-pulse"></div>
+          <div className="w-12 h-12 md:w-16 md:h-16 mb-4">
             <img 
               src="/lovable-uploads/ef4a095b-c738-4af3-9144-dc5579e8eb92.png" 
               alt="和语方舟" 
-              className="w-full h-full object-contain relative z-10 animate-bounce"
+              className="w-full h-full object-contain"
             />
           </div>
-          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#7E69AB] to-[#9b87f5] mb-2 hover:scale-105 transition-transform">
+          <h1 className="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#7E69AB] to-[#9b87f5] mb-2">
             和语方舟
           </h1>
-          <p className="text-sm text-[#8E9196] max-w-md animate-fade-in">专业的社群言论安全监控平台</p>
+          <p className="text-xs md:text-sm text-muted-foreground max-w-md">专业的社群言论安全监控平台</p>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 animate-fade-in">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
           {communityWarnings.map((warning) => (
             <Card 
               key={warning.community}
-              className={`p-4 hover:shadow-xl transition-all duration-300 ${
-                warning.severity === 'critical' ? 'bg-red-50' :
-                warning.severity === 'high' ? 'bg-orange-50' :
-                'bg-yellow-50'
+              className={`p-3 md:p-4 hover:shadow-xl transition-all duration-300 ${
+                warning.severity === 'critical' ? 'bg-red-50/80 dark:bg-red-950/20' :
+                warning.severity === 'high' ? 'bg-orange-50/80 dark:bg-orange-950/20' :
+                'bg-yellow-50/80 dark:bg-yellow-950/20'
               }`}
             >
-              <div className="flex items-center gap-2">
-                <AlertCircle className={`${
+              <div className="flex items-center gap-1 md:gap-2">
+                <AlertCircle className={`w-4 h-4 md:w-5 md:h-5 ${
                   warning.severity === 'critical' ? 'text-red-500' :
                   warning.severity === 'high' ? 'text-orange-500' :
                   'text-yellow-500'
                 }`} />
-                <h3 className="font-medium">{warning.community}</h3>
+                <h3 className="text-sm md:text-base font-medium">{warning.community}</h3>
               </div>
-              <p className="mt-2 text-2xl font-bold">{warning.count}</p>
-              <p className="text-sm text-gray-600">条预警信息</p>
+              <p className="mt-1 md:mt-2 text-lg md:text-2xl font-bold">{warning.count}</p>
+              <p className="text-xs md:text-sm text-muted-foreground">条预警信息</p>
             </Card>
           ))}
         </div>
