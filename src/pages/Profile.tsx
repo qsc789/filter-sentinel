@@ -17,6 +17,7 @@ export default function Profile() {
   const [loading, setLoading] = useState(true)
   const [profile, setProfile] = useState<Profile>({ username: '', avatar_url: null })
   const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
 
   useEffect(() => {
     getProfile()
@@ -26,6 +27,8 @@ export default function Profile() {
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('No user found')
+
+      setEmail(user.email || '')
 
       const { data, error } = await supabase
         .from('profiles')
@@ -93,7 +96,7 @@ export default function Profile() {
               <Input
                 id="email"
                 type="email"
-                value={supabase.auth.getUser().then(({ data }) => data.user?.email)}
+                value={email}
                 disabled
               />
             </div>
