@@ -165,7 +165,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-background/95 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#E5DEFF] to-[#F1F0FB] dark:from-[#1A1F2C] dark:to-[#221F26] p-4 md:p-8">
       <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
         <header className="text-center flex flex-col items-center bg-white/80 dark:bg-black/20 backdrop-blur-lg rounded-2xl p-6 md:p-8 shadow-lg">
           <div className="absolute top-4 right-4 md:top-8 md:right-8">
@@ -209,7 +209,7 @@ const Index = () => {
         </div>
 
         <Tabs defaultValue="monitor" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-8 bg-white/50 backdrop-blur p-1 rounded-xl">
+          <TabsList className="grid w-full grid-cols-4 mb-8 bg-white/50 dark:bg-black/40 backdrop-blur p-1 rounded-xl">
             <TabsTrigger value="monitor" className="flex items-center gap-2 data-[state=active]:bg-[#7E69AB] data-[state=active]:text-white">
               <Shield className="w-4 h-4" />
               平台监控
@@ -234,18 +234,18 @@ const Index = () => {
                 {Object.entries(monitoringStatus).map(([platform, status]) => (
                   <Card 
                     key={platform} 
-                    className="p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-white/80 backdrop-blur-sm border-[#E5DEFF]"
+                    className="p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-white/80 dark:bg-black/40 backdrop-blur-sm border-[#E5DEFF] dark:border-white/10"
                   >
                     <div className="flex justify-between items-center mb-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-[#F1F0FB] p-2 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-full bg-[#F1F0FB] dark:bg-white/10 p-2 flex items-center justify-center">
                           <img 
                             src={`/platform-logos/${platform}.svg`} 
                             alt={platform} 
                             className="w-6 h-6"
                           />
                         </div>
-                        <h3 className="text-lg font-medium capitalize text-[#403E43]">{platform}</h3>
+                        <h3 className="text-lg font-medium capitalize text-[#403E43] dark:text-white">{platform}</h3>
                       </div>
                       <Button
                         variant={status ? "destructive" : "default"}
@@ -260,7 +260,7 @@ const Index = () => {
                         {status ? "停止" : "开始"}
                       </Button>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-[#8E9196]">
+                    <div className="flex items-center gap-2 text-sm text-[#8E9196] dark:text-gray-300">
                       <Activity className={`w-4 h-4 ${status ? "text-green-500" : "text-gray-400"}`} />
                       <span>状态: {status ? "监控中" : "未监控"}</span>
                     </div>
@@ -359,8 +359,8 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="keywords" className="animate-fade-in">
-            <Card className="p-6 bg-white/90 backdrop-blur-sm">
-              <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
+            <Card className="p-6 bg-white/90 dark:bg-black/40 backdrop-blur-sm">
+              <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2 dark:text-white">
                 <Database className="w-6 h-6 text-[#7E69AB]" />
                 关键词管理
               </h2>
@@ -370,19 +370,19 @@ const Index = () => {
                     placeholder="添加新关键词..."
                     value={newKeyword}
                     onChange={(e) => setNewKeyword(e.target.value)}
-                    className="bg-white"
+                    className="bg-white dark:bg-black/20 dark:text-white"
                   />
                   <Button 
                     onClick={addCustomKeyword} 
-                    className="bg-[#7E69AB] hover:bg-[#6E59A5] transition-colors"
+                    className="bg-[#7E69AB] hover:bg-[#6E59A5] transition-colors text-white"
                   >
                     添加
                   </Button>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <Card className="p-4 bg-white/80 hover:shadow-md transition-all duration-300">
-                    <h3 className="font-semibold mb-4 flex items-center gap-2">
+                  <Card className="p-4 bg-white/80 dark:bg-black/20 hover:shadow-md transition-all duration-300">
+                    <h3 className="font-semibold mb-4 flex items-center gap-2 dark:text-white">
                       <Users className="w-4 h-4 text-[#7E69AB]" />
                       社群关键词模板
                     </h3>
@@ -394,7 +394,7 @@ const Index = () => {
                           onClick={() => selectCommunityKeywords(community as keyof typeof COMMUNITY_KEYWORDS)}
                           className={`text-sm ${
                             selectedCommunity === community ? 'border-[#7E69AB] bg-[#7E69AB]/10' : ''
-                          } hover:bg-[#7E69AB]/5 transition-colors`}
+                          } hover:bg-[#7E69AB]/5 transition-colors dark:text-white dark:border-white/20`}
                         >
                           {community === "anime" && "动漫圈"}
                           {community === "cosplay" && "Coser圈"}
@@ -405,8 +405,8 @@ const Index = () => {
                     </div>
                   </Card>
 
-                  <Card className="p-4 bg-white/80 hover:shadow-md transition-all duration-300">
-                    <h3 className="font-semibold mb-4 flex items-center gap-2">
+                  <Card className="p-4 bg-white/80 dark:bg-black/20 hover:shadow-md transition-all duration-300">
+                    <h3 className="font-semibold mb-4 flex items-center gap-2 dark:text-white">
                       <Database className="w-4 h-4 text-[#7E69AB]" />
                       已添加关键词
                     </h3>
@@ -414,7 +414,7 @@ const Index = () => {
                       {customKeywords.map((keyword) => (
                         <span
                           key={keyword}
-                          className="px-3 py-1 bg-[#F1F0FB] text-[#7E69AB] rounded-full text-sm animate-fade-in hover:bg-[#7E69AB] hover:text-white transition-colors cursor-default"
+                          className="px-3 py-1 bg-[#F1F0FB] dark:bg-white/10 text-[#7E69AB] dark:text-white rounded-full text-sm animate-fade-in hover:bg-[#7E69AB] hover:text-white transition-colors cursor-default"
                         >
                           {keyword}
                         </span>
