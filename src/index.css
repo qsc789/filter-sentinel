@@ -57,7 +57,7 @@
   }
 
   body {
-    @apply bg-[#E5DEFF] dark:bg-[#1A1F2C] text-foreground transition-colors duration-300;
+    @apply bg-[#E5DEFF] dark:bg-gradient-to-br dark:from-[#1A1F2C] dark:to-[#221F26] text-foreground transition-colors duration-300;
   }
 }
 

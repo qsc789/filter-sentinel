@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, Waves, Users, Database, ChartLine, Activity, TrendingUp, MessageCircle, AlertCircle, Bell } from "lucide-react";
+import { Shield, Waves, Users, Database, ChartLine, Activity, TrendingUp, MessageCircle, AlertCircle, Bell, User } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { ContentAnalysis } from "@/components/analysis/ContentAnalysis";
 import { ScoringRules } from "@/components/scoring/ScoringRules";
@@ -35,6 +35,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const monitoringData = [
   { time: "00:00", tieba: 40, weibo: 24, tiktok: 67, facebook: 45 },
@@ -167,8 +175,31 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#E5DEFF] to-[#F1F0FB] dark:from-[#1A1F2C] dark:to-[#221F26] p-4 md:p-8">
       <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
-        <header className="text-center flex flex-col items-center bg-white/80 dark:bg-black/20 backdrop-blur-lg rounded-2xl p-6 md:p-8 shadow-lg">
-          <div className="absolute top-4 right-4 md:top-8 md:right-8">
+        <header className="text-center flex flex-col items-center bg-white/80 dark:bg-black/20 backdrop-blur-lg rounded-2xl p-6 md:p-8 shadow-lg relative">
+          <div className="absolute top-4 right-4 md:top-8 md:right-8 flex items-center gap-4">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="hover:bg-[#7E69AB]/10">
+                  <User className="h-5 w-5 text-[#7E69AB]" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>个人中心</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <User className="mr-2 h-4 w-4" />
+                  <span>个人资料</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Bell className="mr-2 h-4 w-4" />
+                  <span>消息通知</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="text-red-600">
+                  退出登录
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <ThemeToggle />
           </div>
           <div className="w-12 h-12 md:w-16 md:h-16 mb-4">
@@ -191,18 +222,18 @@ const Index = () => {
               className={`p-3 md:p-4 hover:shadow-xl transition-all duration-300 ${
                 warning.severity === 'critical' ? 'bg-red-50/80 dark:bg-red-950/20' :
                 warning.severity === 'high' ? 'bg-orange-50/80 dark:bg-orange-950/20' :
-                'bg-yellow-50/80 dark:bg-yellow-950/20'
+                'bg-[#F1F0FB]/80 dark:bg-white/5'
               }`}
             >
               <div className="flex items-center gap-1 md:gap-2">
                 <AlertCircle className={`w-4 h-4 md:w-5 md:h-5 ${
                   warning.severity === 'critical' ? 'text-red-500' :
                   warning.severity === 'high' ? 'text-orange-500' :
-                  'text-yellow-500'
+                  'text-[#7E69AB]'
                 }`} />
                 <h3 className="text-sm md:text-base font-medium">{warning.community}</h3>
               </div>
-              <p className="mt-1 md:mt-2 text-lg md:text-2xl font-bold">{warning.count}</p>
+              <p className="mt-1 md:mt-2 text-lg md:text-xl font-bold">{warning.count}</p>
               <p className="text-xs md:text-sm text-muted-foreground">条预警信息</p>
             </Card>
           ))}
