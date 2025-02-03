@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, Waves, Users, Database, ChartLine, Activity, TrendingUp, MessageCircle, AlertCircle, Bell, User } from "lucide-react";
+import { Shield, Waves, Users, Database, ChartLine, Activity, TrendingUp, MessageCircle, AlertCircle, Bell, User, Settings } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { ContentAnalysis } from "@/components/analysis/ContentAnalysis";
 import { ScoringRules } from "@/components/scoring/ScoringRules";
@@ -186,16 +186,22 @@ const Index = () => {
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>个人中心</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => window.location.href = '/profile'}>
                   <User className="mr-2 h-4 w-4" />
                   <span>个人资料</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Bell className="mr-2 h-4 w-4" />
-                  <span>消息通知</span>
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>设置</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-red-600">
+                <DropdownMenuItem 
+                  className="text-red-600"
+                  onClick={async () => {
+                    await supabase.auth.signOut();
+                    window.location.href = '/';
+                  }}
+                >
                   退出登录
                 </DropdownMenuItem>
               </DropdownMenuContent>
