@@ -32,7 +32,7 @@ const Profile = () => {
         .from('profiles')
         .select('username, avatar_url')
         .eq('id', user.id)
-        .single();
+        .maybeSingle();
 
       if (error) {
         console.error('Error fetching profile:', error);
@@ -82,6 +82,14 @@ const Profile = () => {
       });
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#F8F7FC] dark:bg-gradient-to-br dark:from-[#1A1F2C] dark:to-[#221F26] p-4 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7E69AB]"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F8F7FC] dark:bg-gradient-to-br dark:from-[#1A1F2C] dark:to-[#221F26] p-4">
